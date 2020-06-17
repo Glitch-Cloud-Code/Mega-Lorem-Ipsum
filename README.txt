@@ -3,7 +3,10 @@ In order to get this project up and running you will need:
 *Intellij IDEA
 *SQL database
 
-First go to the ../backend/src/main/resources/ and edit application.properties file.
+First you would need to set up the database and populate it with data.
+Script for that could be found in "../backend/db"
+
+Then go to the "../backend/src/main/resources" and edit application.properties file.
 You will need to change fileds listed below to match your database setup.
 *spring.datasource.url
 *spring.datasource.username
@@ -14,7 +17,7 @@ Open up the backend folder with IntellijIDEA and reimport all maven projects.
 Then you can run the backend by rightclicking IpsumApplication.java and selecting "Run IpsumApplication.main()"
 
 
-Finally, you can open up "index.html" in the browser of your choosing. (Except Internet Explorer. Please don't.)
+Finally, you can open up "index.html" located in "../frontend" folder  with the browser of your choosing. (Except Internet Explorer. Please don't.)
 
 
 Mandatory features that I decided not to include in this task due to time constraints: 
