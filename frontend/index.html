@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="scripts/main.js"></script>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+
+<body onload="load()">
+    <div id="main-container">
+        <button class="add-btn" onclick="enableAddMode()">Add</button>
+        <table id="table">
+            <thead>
+                <tr>
+                    <td><b>ID</b></td>
+                    <td><b>Name</b></td>
+                    <td><b>Number</b></td>
+                    <td><b>Country</b></td>
+                    <td><b>City</b></td>
+                    <td><b>Company</b></td>
+                    <td><b>Actions</b></td>
+                </tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+        </table>
+        <button class="add-btn" onclick="enableAddMode()">Add</button>
+    </div>
+    <div id="modal">
+        <button id="close-cross" onclick="closeModal()"> X</button>
+        <h3 id="modal-header">Confirmation modal</h3>
+        <p id="modal-message"></p>
+        <div id="modal-bottom-row">
+            <button onclick="confirmAction()">Confirm</button>
+            <button onclick="closeModal()">Close</button>
+        </div>
+    </div>
+</body>
+
+</html>
