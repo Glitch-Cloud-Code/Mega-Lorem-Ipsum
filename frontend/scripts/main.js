@@ -1,51 +1,5 @@
-//Rest calls
-const addRecord = async (data) => {
-    fetch("http://localhost:8080/data", {
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: new Headers({
-            'content-type': 'application/json'
-        }),
-    }).then(() => {
-        load();
-    });
-}
-
-const deleteRecord = async (id) => {
-    fetch("http://localhost:8080/data/" + id, {
-        method: "DELETE",
-        headers: new Headers({
-            'content-type': 'application/json'
-        }),
-    }).then(() => {
-        load();
-    });
-}
-
-const updateRecord = async (id, data) => {
-    fetch("http://localhost:8080/data/" + id, {
-        method: "PUT",
-        body: JSON.stringify(data),
-        headers: new Headers({
-            'content-type': 'application/json'
-        }),
-    }).then(() => {
-        load();
-    });
-}
-
-const getAllRecords = async () => {
-    return fetch("http://localhost:8080/data", {
-        method: "GET",
-        headers: new Headers({
-            'content-type': 'application/json'
-        }),
-    }).then(res => {
-        return res.json();
-    }).then((data) => {
-        return data;
-    });
-}
+import { Record } from "./model/record.js";
+import * as RecordService from "./services/recordService.js";
 
 //Global variables
 let saved_edit_row = "";
@@ -64,40 +18,44 @@ function addRecordIntoTheTable(record, table) {
     let row = table.insertRow(rowCount);
     row.id = "row-" + record.id;
 
-    row.insertCell(0).innerHTML = record.id;
-    row.insertCell(1).innerHTML = record.name;
-    row.insertCell(2).innerHTML = record.number;
-    row.insertCell(3).innerHTML = record.country;
-    row.insertCell(4).innerHTML = record.city;
-    row.insertCell(5).innerHTML = record.company;
+    row.insertCell(0).innerHTML = record.getId();
+    row.insertCell(1).innerHTML = record.getName();
+    row.insertCell(2).innerHTML = record.getNumber();
+    row.insertCell(3).innerHTML = record.getCountry();
+    row.insertCell(4).innerHTML = record.getCity();
+    row.insertCell(5).innerHTML = record.getCompany();
     row.insertCell(6).innerHTML = "<button onclick=openModal(" + record.id + ",'DELETE')>Delete</button>" +
         "<button onclick=enableEdit(" + record.id + ")>Edit</button>";
 }
 
-//On page load function.
-//Loads data and checks if we need to open confirmation modal straight away.
 const load = function () {
-    getAllRecords().then((data) => {
+
+    //Load data
+    RecordService.getAllRecords().then((data) => {
         populateData(data);
     });
-    modal = document.getElementById("modal");
-    modal_message = document.getElementById("modal-message");
-    modal.onclick = function (event) {
-        event.stopPropagation();
-    }
 
-    //Check for outside click on the modal
-    document.addEventListener('click', function (event) {
-        if (modal_visible) {
-            var isClickInside = modal.contains(event.target);
+    setModalGlobalVariables();
+    stopModalEventPropagation();
+    openModalIfRequired();
+    addEventListeners();
+}
 
-            if (!isClickInside) {
-                closeModal();
-            }
-        }
-    });
+//Adds functions to the global scope for them to be callable from the HTML 
+const setGlobalFunctions = function() {
+    window.load = load;
+    window.enableEdit = enableEdit;
+    window.cancelEdit = cancelEdit;
+    window.enableAddMode = enableAddMode;
+    window.confirmAdd = confirmAdd;
+    window.cancelAdd = cancelAdd;
+    window.openModal = openModal;
+    window.confirmAction = confirmAction;
+    window.closeModal = closeModal;
+}
 
-    //Check for params in URL and open modal if required
+//Check for params in URL and open modal if required
+const openModalIfRequired = function () {
     const queryString = window.location.search;
     if (queryString != "" || queryString != "?") {
         const urlParams = new URLSearchParams(queryString);
@@ -109,6 +67,32 @@ const load = function () {
     }
 }
 
+//Initiates event listeners on the document
+const addEventListeners = function () {
+    //Check for outside click on the modal
+    document.addEventListener('click', function (event) {
+        if (modal_visible) {
+            let isClickInside = modal.contains(event.target);
+
+            if (!isClickInside) {
+                closeModal();
+            }
+        }
+    });
+}
+
+//Sets global variables for modal window
+const setModalGlobalVariables = function () {
+    modal = document.getElementById("modal");
+    modal_message = document.getElementById("modal-message");
+}
+
+//Stop event propagation of click on modal so user can't click through the modal
+const stopModalEventPropagation = function () {
+    modal.onclick = function (event) {
+        event.stopPropagation();
+    }
+}
 
 //Reloads table. 
 //Erases old table body, creates new one and populates it with provided data
@@ -116,7 +100,7 @@ const populateData = function (data) {
     let new_tbody = document.createElement('tbody');
     new_tbody.id = "table-body";
     for (let record of data) {
-        addRecordIntoTheTable(record, new_tbody);
+        addRecordIntoTheTable(new Record(record), new_tbody);
     }
     let old_tbody = document.getElementById("table-body");
     old_tbody.parentNode.replaceChild(new_tbody, old_tbody);
@@ -156,13 +140,15 @@ const confirmEdit = function (id) {
     if (!edit_mode) {
         return;
     }
-    edit_obj = {};
-    edit_obj.name = document.getElementById("col-1-edit").value;
-    edit_obj.number = document.getElementById("col-2-edit").value;
-    edit_obj.country = document.getElementById("col-3-edit").value;
-    edit_obj.city = document.getElementById("col-4-edit").value;
-    edit_obj.company = document.getElementById("col-5-edit").value;
-    updateRecord(id, edit_obj);
+
+    let record = new Record ();
+    record.setName(document.getElementById("col-1-edit").value);
+    record.setNumber(document.getElementById("col-2-edit").value);
+    record.setCountry(document.getElementById("col-3-edit").value);
+    record.setCity(document.getElementById("col-4-edit").value);
+    record.setCompany(document.getElementById("col-5-edit").value);
+
+    RecordService.updateRecord(id, record);
     cancelEdit(id);
 }
 
@@ -188,18 +174,17 @@ const enableAddMode = function () {
 }
 
 //Takes data from the populated(or not so populated) inputs in the "add" row and sends add request to the backend
-const confirmAdd = function (id) {
-    let row = document.getElementById(id);
+const confirmAdd = function () {
     if (!add_mode) {
         return;
     }
-    add_obj = {};
-    add_obj.name = document.getElementById("col-1-add").value;
-    add_obj.number = document.getElementById("col-2-add").value;
-    add_obj.country = document.getElementById("col-3-add").value;
-    add_obj.city = document.getElementById("col-4-add").value;
-    add_obj.company = document.getElementById("col-5-add").value;
-    addRecord(add_obj);
+    let record = new Record;
+    record.setName(document.getElementById("col-1-add").value);
+    record.setNumber(document.getElementById("col-2-add").value);
+    record.setCountry(document.getElementById("col-3-add").value);
+    record.setCity(document.getElementById("col-4-add").value);
+    record.setCompany(document.getElementById("col-5-add").value);
+    RecordService.addRecord(record);
     add_mode = false;
 }
 
@@ -233,7 +218,7 @@ const openModal = function (id, action) {
 const confirmAction = function () {
     switch (awaiting_action) {
         case "DELETE":
-            deleteRecord(awaiting_action_id);
+            RecordService.deleteRecord(awaiting_action_id);
             break;
         case "EDIT":
             confirmEdit(awaiting_action_id);
@@ -249,3 +234,5 @@ const closeModal = function () {
     awaiting_action_id = null;
     window.history.pushState("Lorem", "Ipsum", "?");
 }
+
+setGlobalFunctions();
