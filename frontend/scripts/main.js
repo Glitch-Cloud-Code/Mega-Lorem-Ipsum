@@ -14,6 +14,7 @@ let modal_message;
 let modal_visible = false;
 let awaiting_action;
 let awaiting_action_id;
+
 let validationResults = {
     name: true,
     number: true,
@@ -21,6 +22,7 @@ let validationResults = {
     city: true,
     company: true
 };
+
 let inputIndexes = {
     1: "name",
     2: "number",
@@ -102,6 +104,14 @@ const addEventListeners = function () {
             let isClickInside = modal.contains(event.target);
 
             if (!isClickInside) {
+                closeModal();
+            }
+        }
+    });
+    
+    document.addEventListener('keydown', function (event) {
+        if (modal_visible) {
+            if (event.key == "Escape") {
                 closeModal();
             }
         }
