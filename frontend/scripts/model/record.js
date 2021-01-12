@@ -61,4 +61,20 @@ export class Record {
         this.company = company;
     }
 
+    setParamsFromInputs(inputPrefix) {
+        this.name = document.getElementById("col-1-"+inputPrefix).value;
+        this.number = document.getElementById("col-2-"+inputPrefix).value;
+        this.country = document.getElementById("col-3-"+inputPrefix).value;
+        this.city = document.getElementById("col-4-"+inputPrefix).value;
+        this.company = document.getElementById("col-5-"+inputPrefix).value;
+    }
+
+    pushParamsToInputs(inputPrefix) {
+        document.getElementById("col-1-" + inputPrefix).value = this.name;
+        document.getElementById("col-2-" + inputPrefix).value = this.number;
+        document.getElementById("col-3-" + inputPrefix).value = this.country;
+        document.getElementById("col-4-" + inputPrefix).value = this.city;
+        document.getElementById("col-5-" + inputPrefix).value = this.company;
+    }
+
 }

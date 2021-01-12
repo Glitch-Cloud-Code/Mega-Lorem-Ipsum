@@ -49,8 +49,7 @@ function addRecordIntoTheTable(record, table) {
 
 //Sets up everything needed on the initial load of the page
 const load = function () {
-
-    //Load data
+    //Load data from the backend
     RecordRESTService.getAllRecords().then((data) => {
         populateData(data);
     }).then(() => {
@@ -108,7 +107,7 @@ const addEventListeners = function () {
             }
         }
     });
-    
+    //Checks for the escape button press
     document.addEventListener('keydown', function (event) {
         if (modal_visible) {
             if (event.key == "Escape") {
@@ -180,11 +179,7 @@ const confirmEdit = function (id) {
     }
 
     let record = new Record();
-    record.setName(document.getElementById("col-1-edit").value);
-    record.setNumber(document.getElementById("col-2-edit").value);
-    record.setCountry(document.getElementById("col-3-edit").value);
-    record.setCity(document.getElementById("col-4-edit").value);
-    record.setCompany(document.getElementById("col-5-edit").value);
+    record.setParamsFromInputs("edit");
 
     RecordRESTService.updateRecord(id, record);
     cancelEdit(id);
@@ -218,11 +213,7 @@ const confirmAdd = function () {
         return;
     }
     let record = new Record;
-    record.setName(document.getElementById("col-1-add").value);
-    record.setNumber(document.getElementById("col-2-add").value);
-    record.setCountry(document.getElementById("col-3-add").value);
-    record.setCity(document.getElementById("col-4-add").value);
-    record.setCompany(document.getElementById("col-5-add").value);
+    record.setParamsFromInputs("add");
     RecordRESTService.addRecord(record);
     add_mode = false;
 }
@@ -244,37 +235,18 @@ const openModal = function (id, action, record) {
     awaiting_action = action;
     awaiting_action_id = id;
 
-    //Push parameters to the address bar
-
     if (action == "EDIT") {
         if (!record) {
             let record = new Record();
-            record.setName(document.getElementById("col-1-edit").value);
-            record.setNumber(document.getElementById("col-2-edit").value);
-            record.setCountry(document.getElementById("col-3-edit").value);
-            record.setCity(document.getElementById("col-4-edit").value);
-            record.setCompany(document.getElementById("col-5-edit").value);
-            window.history.pushState("Lorem", "Ipsum",
-                "?id=" + id +
-                "&action=" + action +
-                "&col-1=" + record.getName() +
-                "&col-2=" + record.getNumber() +
-                "&col-3=" + record.getCountry() +
-                "&col-4=" + record.getCity() +
-                "&col-5=" + record.getCompany());
+            record.setParamsFromInputs("edit");
+            pushParamsToState(id, action, record);
         } else {
             let changeEvent = new Event("change");
             enableEditMode(id);
-            document.getElementById("col-1-edit").value = record.getName();
-            document.getElementById("col-1-edit").dispatchEvent(changeEvent);
-            document.getElementById("col-2-edit").value = record.getNumber();
-            document.getElementById("col-2-edit").dispatchEvent(changeEvent);
-            document.getElementById("col-3-edit").value = record.getCountry();
-            document.getElementById("col-3-edit").dispatchEvent(changeEvent);
-            document.getElementById("col-4-edit").value = record.getCity();
-            document.getElementById("col-4-edit").dispatchEvent(changeEvent);
-            document.getElementById("col-5-edit").value = record.getCompany();
-            document.getElementById("col-5-edit").dispatchEvent(changeEvent);
+            record.pushParamsToInputs("edit");
+            for (let i = 0; i <= 5; i++) {
+                document.getElementById("col-" + i + "-edit").dispatchEvent(changeEvent);
+            }
             if (!checkFormStatus()) {
                 cancelEdit(id);
                 awaiting_action = null;
@@ -283,13 +255,29 @@ const openModal = function (id, action, record) {
             }
         }
     } else {
-        window.history.pushState("Lorem", "Ipsum", "?id=" + id + "&action=" + action);
+        pushParamsToState(id, action);
     }
 
     //Delay modal visible to avoid instant closing by click outside
     setTimeout(() => {
         modal_visible = true;
     }, 10)
+}
+
+//Pushes parameters to adress bar
+const pushParamsToState = function (id, action, record) {
+    if (record) {
+        window.history.pushState("Lorem", "Ipsum",
+            "?id=" + id +
+            "&action=" + action +
+            "&col-1=" + record.getName() +
+            "&col-2=" + record.getNumber() +
+            "&col-3=" + record.getCountry() +
+            "&col-4=" + record.getCity() +
+            "&col-5=" + record.getCompany());
+    } else {
+        window.history.pushState("Lorem", "Ipsum", "?id=" + id + "&action=" + action);
+    }
 }
 
 //Called on modal confirmation
@@ -313,6 +301,7 @@ const closeModal = function () {
     window.history.pushState("Lorem", "Ipsum", "?");
 }
 
+//Sets event listeners for the inputs
 const setEventListenersForInputs = function (actionType) {
     for (let i = 1; i <= 5; i++) {
         document.getElementById("col-" + i + "-" + actionType).addEventListener('change', (event) => {
@@ -339,7 +328,6 @@ const validateInput = function (inputIndex, inputValue) {
 
 //If any of the form fields didn't pass validation - form status will be set to false
 const checkFormStatus = function () {
-
     let formStatus = true;
     for (const key in validationResults) {
 
@@ -353,6 +341,7 @@ const checkFormStatus = function () {
     return formStatus;
 }
 
+//Enables or disables confirmation button depending on the validation status
 const setConfirmButtonStatus = function (formStatus) {
     if (formStatus) {
         document.getElementById("confirm-btn").disabled = false;
