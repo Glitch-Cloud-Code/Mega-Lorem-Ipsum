@@ -177,10 +177,8 @@ const confirmEdit = function (id) {
     if (!edit_mode) {
         return;
     }
-
     let record = new Record();
     record.setParamsFromInputs("edit");
-
     RecordRESTService.updateRecord(id, record);
     cancelEdit(id);
 }
@@ -196,7 +194,6 @@ const enableAddMode = function () {
     let rowCount = table.rows.length;
     let row = table.insertRow(rowCount);
     row.id = "add-row";
-
     row.insertCell(0).innerHTML = "<td>#</td>";
     for (let i = 1; i <= 5; i++) {
         row.insertCell(i).innerHTML = "<input id='col-" + i + "-add' value=''><div id='col-" + i + "-error'>";
@@ -244,7 +241,7 @@ const openModal = function (id, action, record) {
             let changeEvent = new Event("change");
             enableEditMode(id);
             record.pushParamsToInputs("edit");
-            for (let i = 0; i <= 5; i++) {
+            for (let i = 1; i <= 5; i++) {
                 document.getElementById("col-" + i + "-edit").dispatchEvent(changeEvent);
             }
             if (!checkFormStatus()) {
@@ -330,7 +327,6 @@ const validateInput = function (inputIndex, inputValue) {
 const checkFormStatus = function () {
     let formStatus = true;
     for (const key in validationResults) {
-
         if (Object.hasOwnProperty.call(validationResults, key)) {
             if (validationResults[key] == false) {
                 formStatus = false;
