@@ -152,7 +152,7 @@ const enableEditMode = function (id) {
     let old_row = document.getElementById("row-" + id);
     saved_edit_row = old_row.innerHTML;
     for (let i = 1; i < old_row.cells.length - 1; i++) {
-        old_row.cells[i].innerHTML =  "<div class='form__group field'><input type='input' placeholder="+inputIndexes[i]+" name="+inputIndexes[i]+" class='form__field' id='col-" + i + "-edit' value='" + old_row.cells[i].innerHTML + "'><label for='col-" + i + "-edit' class='form__label'>"+inputIndexes[i]+"</label><div class='error-message' id='col-" + i + "-error'></div>";
+        old_row.cells[i].innerHTML = "<div class='form__group field'><input type='input' placeholder=" + inputIndexes[i] + " name=" + inputIndexes[i] + " class='form__field' id='col-" + i + "-edit' value='" + old_row.cells[i].innerHTML + "'><label for='col-" + i + "-edit' class='form__label'>" + inputIndexes[i] + "</label><div class='error-message' id='col-" + i + "-error'></div>";
         //"<input id='col-" + i + "-edit' value='" + old_row.cells[i].innerHTML + "'><div id='col-" + i + "-error'>";
     }
     old_row.cells[old_row.cells.length - 1].innerHTML = "<div class='button-wrapper'><button class='svg-btn' id='confirm-btn' onclick=openModal(" + id + ",'EDIT')><img class='green-filter' src='./assets/svg/confirm-button.svg'></img></button>" +
@@ -197,7 +197,7 @@ const enableAddMode = function () {
     row.id = "add-row";
     row.insertCell(0).innerHTML = "<td>#</td>";
     for (let i = 1; i <= 5; i++) {
-        row.insertCell(i).innerHTML = "<div class='form__group field'><input type='input' placeholder="+inputIndexes[i]+" name="+inputIndexes[i]+" class='form__field' id='col-" + i + "-add'><label for='col-" + i + "-add' class='form__label'>"+inputIndexes[i]+"</label><div class='error-message' id='col-" + i + "-error'></div>";
+        row.insertCell(i).innerHTML = "<div class='form__group field'><input type='input' placeholder=" + inputIndexes[i] + " name=" + inputIndexes[i] + " class='form__field' id='col-" + i + "-add'><label for='col-" + i + "-add' class='form__label'>" + inputIndexes[i] + "</label><div class='error-message' id='col-" + i + "-error'></div>";
     }
     row.insertCell(6).innerHTML = "<div class='button-wrapper'><button id='confirm-btn' class='svg-btn' onclick=confirmAdd('add-row')><img class='green-filter' src='./assets/svg/confirm-button.svg'></img></button>" +
         "<button class='svg-btn' onclick=cancelAdd('add-row')><img class='red-filter' src='./assets/svg/cancel-button.svg'></img></button></div>";

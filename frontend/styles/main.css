@@ -22,9 +22,8 @@ html {
 }
 
 .add-btn {
-    margin-left: auto;
-    margin-top: 1rem;
-    margin-bottom: 1rem;
+    margin: 1rem 0 1rem auto;
+    padding: 0;
 }
 
 .svg-btn {
@@ -33,7 +32,7 @@ html {
     cursor: pointer;
 }
 
-.svg-btn img{
+.svg-btn img {
     width: 1.5rem;
     height: 1.5rem;
 }
@@ -56,20 +55,19 @@ html {
 /* Modal styles */
 #modal {
     top: 100%;
-    left: 25%;
+    left: 50%;
+    transform: translate(-50%, 0%);
     width: 50%;
     height: 40%;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    min-height: 20rem;
+    min-width: 20rem;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
     opacity: 0;
     background-color: #ffffff;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
     display: flex;
+    flex-direction: column;
+    position: fixed;
     text-align: center;
-    vertical-align: middle;
     -webkit-transition: all 1s ease;
     -moz-transition: all 1s ease;
     -o-transition: all 1s ease;
@@ -107,7 +105,7 @@ html {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    font-size: 2rem;
+    font-size: 1.5rem;
 }
 
 .modal-button-wrapper {
@@ -118,6 +116,7 @@ html {
 .modal-button-wrapper button {
     margin: 1.5rem;
 }
+
 .modal-button-wrapper button img {
     height: 3rem;
     width: 3rem;
@@ -138,6 +137,7 @@ html {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
     border-collapse: collapse;
 }
+
 thead {
     top: 0;
     position: sticky;
@@ -147,7 +147,7 @@ thead {
 thead tr {
     background-color: #009879;
     color: #ffffff;
- }
+}
 
 td,
 th {
@@ -186,9 +186,9 @@ button {
     width: 80%;
     display: flex;
     flex-direction: column;
-  }
-  
-  .form__field {
+}
+
+.form__field {
     font-family: inherit;
     width: 100%;
     border: 0;
@@ -199,33 +199,36 @@ button {
     padding: 7px 0;
     background: transparent;
     transition: border-color 0.2s;
-  }
-  .form__field::placeholder {
+}
+
+.form__field::placeholder {
     color: transparent;
-  }
-  .form__field:placeholder-shown ~ .form__label {
+}
+
+.form__field:placeholder-shown~.form__label {
     font-size: 1.3rem;
     cursor: text;
     top: 20px;
-  }
-  
-  .form__label {
+}
+
+.form__label {
     position: absolute;
     top: 0;
     display: block;
     transition: 0.2s;
     font-size: 1rem;
     color: #9b9b9b;
-  }
-  
-  .form__field:focus {
+}
+
+.form__field:focus {
     padding-bottom: 6px;
 
     border-width: 3px;
     border-image: linear-gradient(to right, #11998e, #38ef7d);
     border-image-slice: 1;
-  }
-  .form__field:focus ~ .form__label {
+}
+
+.form__field:focus~.form__label {
     position: absolute;
     top: 0;
     display: block;
@@ -233,22 +236,22 @@ button {
     font-size: 1rem;
     color: #11998e;
 
-  }
+}
 
-  .error-message {
-      color:rgb(150, 0, 0);
-      font-size: 0.7rem;
-      justify-self: flex-end;
-      margin-top: auto;
-  }
+.error-message {
+    color: rgb(150, 0, 0);
+    font-size: 0.7rem;
+    justify-self: flex-end;
+    margin-top: auto;
+}
 
-  .button-wrapper {
-      display: flex;
-      flex-direction: row;
-      justify-content: left;
-  }
+.button-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
 
-  /* Mobile layout */
+/* Mobile layout */
 @media only screen and (max-width: 850px) {
 
     table,
