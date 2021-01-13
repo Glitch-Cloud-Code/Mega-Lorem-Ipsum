@@ -43,8 +43,8 @@ function addRecordIntoTheTable(record, table) {
     row.insertCell(3).innerHTML = record.getCountry();
     row.insertCell(4).innerHTML = record.getCity();
     row.insertCell(5).innerHTML = record.getCompany();
-    row.insertCell(6).innerHTML = "<button onclick=openModal(" + record.id + ",'DELETE')>Delete</button>" +
-        "<button onclick=enableEditMode(" + record.id + ")>Edit</button>";
+    row.insertCell(6).innerHTML = "<div class='button-wrapper'><button class='svg-btn' onclick=openModal(" + record.id + ",'DELETE')><img class='red-filter' src='./assets/svg/delete-button.svg'></button>" +
+        "<button class='svg-btn' onclick=enableEditMode(" + record.id + ")><img class='blue-filter' src='./assets/svg/edit-button.svg'></img></button></div>";
 }
 
 //Sets up everything needed on the initial load of the page
@@ -152,10 +152,11 @@ const enableEditMode = function (id) {
     let old_row = document.getElementById("row-" + id);
     saved_edit_row = old_row.innerHTML;
     for (let i = 1; i < old_row.cells.length - 1; i++) {
-        old_row.cells[i].innerHTML = "<input id='col-" + i + "-edit' value='" + old_row.cells[i].innerHTML + "'><div id='col-" + i + "-error'>";
+        old_row.cells[i].innerHTML =  "<div class='form__group field'><input type='input' placeholder="+inputIndexes[i]+" name="+inputIndexes[i]+" class='form__field' id='col-" + i + "-edit' value='" + old_row.cells[i].innerHTML + "'><label for='col-" + i + "-edit' class='form__label'>"+inputIndexes[i]+"</label><div class='error-message' id='col-" + i + "-error'></div>";
+        //"<input id='col-" + i + "-edit' value='" + old_row.cells[i].innerHTML + "'><div id='col-" + i + "-error'>";
     }
-    old_row.cells[old_row.cells.length - 1].innerHTML = "<button id='confirm-btn' onclick=openModal(" + id + ",'EDIT')>Confirm</button>" +
-        "<button onclick=cancelEdit(" + id + ")>Cancel</button>";
+    old_row.cells[old_row.cells.length - 1].innerHTML = "<div class='button-wrapper'><button class='svg-btn' id='confirm-btn' onclick=openModal(" + id + ",'EDIT')><img class='green-filter' src='./assets/svg/confirm-button.svg'></img></button>" +
+        "<button class='svg-btn'  onclick=cancelEdit(" + id + ")><img class='red-filter' src='./assets/svg/cancel-button.svg'></img></button></div>";
     setEventListenersForInputs("edit");
 }
 
@@ -196,10 +197,10 @@ const enableAddMode = function () {
     row.id = "add-row";
     row.insertCell(0).innerHTML = "<td>#</td>";
     for (let i = 1; i <= 5; i++) {
-        row.insertCell(i).innerHTML = "<input id='col-" + i + "-add' value=''><div id='col-" + i + "-error'>";
+        row.insertCell(i).innerHTML = "<div class='form__group field'><input type='input' placeholder="+inputIndexes[i]+" name="+inputIndexes[i]+" class='form__field' id='col-" + i + "-add'><label for='col-" + i + "-add' class='form__label'>"+inputIndexes[i]+"</label><div class='error-message' id='col-" + i + "-error'></div>";
     }
-    row.insertCell(6).innerHTML = "<button id='confirm-btn' onclick=confirmAdd('add-row')>Confirm</button>" +
-        "<button onclick=cancelAdd('add-row')>Cancel</button>";
+    row.insertCell(6).innerHTML = "<div class='button-wrapper'><button id='confirm-btn' class='svg-btn' onclick=confirmAdd('add-row')><img class='green-filter' src='./assets/svg/confirm-button.svg'></img></button>" +
+        "<button class='svg-btn' onclick=cancelAdd('add-row')><img class='red-filter' src='./assets/svg/cancel-button.svg'></img></button></div>";
     setEventListenersForInputs("add");
     window.scrollTo(0, document.body.scrollHeight);
 }
@@ -228,7 +229,7 @@ const cancelAdd = function (id) {
 //Open modal
 const openModal = function (id, action, record) {
     modal.classList.add("slide-in");
-    modal_message.innerHTML = "Do you really want to <b>" + action + "</b> row with ID <b>" + id + "</b>";
+    modal_message.innerHTML = "Do you really want to <b>" + action + "</b> row with ID <b>" + id + "</b>?";
     awaiting_action = action;
     awaiting_action_id = id;
 

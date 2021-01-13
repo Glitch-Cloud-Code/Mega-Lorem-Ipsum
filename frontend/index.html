@@ -7,11 +7,14 @@
     <title>Mega Lorem Ipsum</title>
     <script type="module" src="./scripts/main.js"></script>
     <link rel="stylesheet" href="styles/main.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@500&family=Roboto:wght@400;500&display=swap"
+        rel="stylesheet">
 </head>
 
 <body onload="load()">
     <div id="main-container">
-        <button class="add-btn" onclick="enableAddMode()">Add</button>
+        <button class="add-btn svg-btn" onclick="enableAddMode()"><img class='green-filter'
+                src='./assets/svg/add-button.svg'></button>
         <table id="table">
             <thead>
                 <tr>
@@ -26,15 +29,23 @@
             </thead>
             <tbody id="table-body"></tbody>
         </table>
-        <button class="add-btn" onclick="enableAddMode()">Add</button>
+        <button class="add-btn svg-btn" onclick="enableAddMode()"><img class='green-filter'
+                src='./assets/svg/add-button.svg'></button>
     </div>
     <div id="modal">
-        <button id="close-cross" onclick="closeModal()"> X</button>
-        <h3 id="modal-header">Confirmation modal</h3>
-        <p id="modal-message"></p>
-        <div id="modal-bottom-row">
-            <button onclick="confirmAction()">Confirm</button>
-            <button onclick="closeModal()">Close</button>
+        <div class="modal-header">
+            <p>Confirmation modal</p>
+            <button class="svg-btn modal-close-btn" onclick="closeModal()"><img class='red-filter'
+                    src='./assets/svg/close-button.svg'></button>
+        </div>
+        <div class="modal-body">
+            <p id="modal-message"></p>
+            <div class="modal-button-wrapper" id="modal-bottom-row">
+                <button class="svg-btn" onclick="confirmAction()"><img class='green-filter'
+                    src='./assets/svg/confirm-button.svg'></button>
+                <button class="svg-btn" onclick="closeModal()"><img class='red-filter'
+                    src='./assets/svg/cancel-button.svg'></button></button>
+            </div>
         </div>
     </div>
 </body>
