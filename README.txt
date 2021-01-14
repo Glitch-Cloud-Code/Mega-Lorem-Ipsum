@@ -16,12 +16,6 @@ Open up the backend folder with IntellijIDEA and reimport all maven projects.
 (Maven button in the right top corner, then left most button in the opened sidebar).
 Then you can run the backend by rightclicking IpsumApplication.java and selecting "Run IpsumApplication.main()"
 
-
-Finally, you can open up "index.html" located in "../frontend" folder  with the browser of your choosing. (Except Internet Explorer. Please don't.)
-
-
-Mandatory features that I decided not to include in this task due to time constraints: 
-*Validations for inputs
-*HTML tags stripping form inputs
-*Security
-*Backend error output to UI
+Then you will need to set up some sort of live-server for the front-end.
+I used "Live Server" extension for the VS Code. If you decide to use it - just press "Go Live" button in the bottom right corner of the VSCode while having project open.
+Project should open up in the browser under "http://127.0.0.1:5500/".
